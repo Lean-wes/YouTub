@@ -6,7 +6,6 @@
     <title>Descargador de Audio de YouTube</title>
     <meta name="description" content="Descarga audio de videos de YouTube en varios formatos y opciones de calidad. Rápido, gratis y fácil de usar.">
     
-    <!-- Estilos CSS integrados -->
     <style>
         :root {
             --primary: #FF0000;
@@ -381,9 +380,6 @@
             font-style: normal;
         }
     </style>
-    
-    <!-- Título de la página -->
-    <title>Descargador de Audio de YouTube</title>
 </head>
 <body>
     <div class="card">
@@ -524,7 +520,6 @@
     
     <p class="footer">Esta herramienta es solo para fines educativos</p>
     
-    <!-- Script JavaScript integrado -->
     <script>
         // Variables y elementos del DOM
         const urlInput = document.getElementById('youtube-url');
@@ -720,17 +715,6 @@
             urlError.style.display = 'none';
             resultContainer.style.display = 'none';
             downloadBtn.disabled = true;
-        });
-
-        // Estilizar la selección de radio buttons
-        const radioInputs = document.querySelectorAll('input[type="radio"]');
-        radioInputs.forEach(input => {
-            input.addEventListener('change', function() {
-                document.querySelectorAll('.radio-circle:after').forEach(circle => {
-                    circle.style.opacity = '0';
-                });
-                this.nextElementSibling.querySelector(':after').style.opacity = '1';
-            });
         });
     </script>
 </body>
