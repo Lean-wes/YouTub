@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Descargador de Audio de YouTube</title>
+    <meta name="description" content="Descarga audio de videos de YouTube en varios formatos y opciones de calidad. Rápido, gratis y fácil de usar.">
+    
+    <!-- Estilos CSS integrados -->
+    <style>
+        :root {
+            --primary: #FF0000;
+            --secondary: #1a1a1a;
+            --accent: #1a73e8;
+            --success: #34a853;
+            --error: #ea4335;
+            --neutral: #f5f5f5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .card {
+            width: 100%;
+            max-width: 480px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .card-header i {
+            color: var(--primary);
+            font-size: 1.75rem;
+        }
+        
+        .card-header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .card-content {
+            padding: 1.25rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 0.25rem;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-wrapper i {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .input-wrapper .status-icon {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            padding-left: 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: calc(100% - 0.75rem) center;
+            padding-right: 2.5rem;
+        }
+        
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+        }
+        
+        .error-message {
+            color: var(--error);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .radio-item {
+            position: relative;
+            padding: 0.75rem;
+            border-radius: 8px;
+            background-color: var(--neutral);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .radio-item:hover {
+            background-color: #e9e9e9;
+        }
+        
+        .radio-item input {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .radio-circle {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #888;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .radio-circle:after {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .radio-item input:checked + .radio-circle:after {
+            opacity: 1;
+        }
+        
+        .radio-item input:checked ~ .radio-border {
+            opacity: 1;
+        }
+        
+        .radio-border {
+            position: absolute;
+            inset: 0;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .radio-label {
+            color: #444;
+            font-size: 0.875rem;
+        }
+        
+        .btn {
+            width: 100%;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: #1565c0;
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .progress-container {
+            margin-top: 1.25rem;
+            display: none;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+            color: #555;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .progress-message {
+            text-align: center;
+            font-size: 0.875rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .result-container {
+            margin-top: 1.25rem;
+            display: none;
+        }
+        
+        .result-success {
+            background-color: #e6f4ea;
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .result-error {
+            background-color: #fce8e6;
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .result-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .result-message {
+            font-size: 0.8125rem;
+        }
+        
+        .result-actions {
+            margin-top: 0.75rem;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .result-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .result-btn:hover {
+            color: #1565c0;
+        }
+        
+        .info-box {
+            border-top: 1px solid #eee;
+            background-color: #fafafa;
+            padding: 1rem;
+        }
+        
+        .info-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        
+        .info-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .info-arrow {
+            transition: transform 0.3s;
+        }
+        
+        details[open] .info-arrow {
+            transform: rotate(180deg);
+        }
+        
+        .info-content {
+            margin-top: 0.75rem;
+            font-size: 0.8125rem;
+            color: #666;
+        }
+        
+        .info-list {
+            margin-top: 0.5rem;
+            margin-left: 1.5rem;
+        }
+        
+        .info-list li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .info-note {
+            font-size: 0.75rem;
+            color: #777;
+            margin-top: 0.5rem;
+        }
+        
+        .footer {
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            color: #777;
+            text-align: center;
+        }
+        
+        /* Iconos (usando entidades HTML en lugar de una librería) */
+        .icon {
+            font-style: normal;
+        }
+    </style>
+    
+    <!-- Título de la página -->
+    <title>Descargador de Audio de YouTube</title>
+</head>
+<body>
+    <div class="card">
+        <!-- Encabezado -->
+        <div class="card-header">
+            <span class="icon">🎵</span>
+            <h1>Descargador de Audio de YouTube</h1>
+        </div>
+        
+        <!-- Contenido principal -->
+        <div class="card-content">
+            <!-- Formulario de entrada de URL -->
+            <div class="form-group">
+                <label for="youtube-url">URL de YouTube</label>
+                <div class="input-wrapper">
+                    <span class="icon" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);">🔗</span>
+                    <input 
+                        type="text" 
+                        id="youtube-url" 
+                        placeholder="https://www.youtube.com/watch?v=..."
+                    >
+                    <div class="status-icon check-icon" style="display: none; color: green;">✓</div>
+                    <div class="status-icon error-icon" style="display: none; color: red;">✗</div>
+                </div>
+                <div class="error-message" id="url-error">Por favor ingresa una URL válida de YouTube</div>
+            </div>
+            
+            <!-- Selección de formato -->
+            <div class="form-group">
+                <label>Formato de Audio</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="format" value="mp3" checked>
+                        <div class="radio-circle"></div>
+                        <span class="radio-label">MP3</span>
+                        <div class="radio-border"></div>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="format" value="m4a">
+                        <div class="radio-circle"></div>
+                        <span class="radio-label">M4A</span>
+                        <div class="radio-border"></div>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="format" value="ogg">
+                        <div class="radio-circle"></div>
+                        <span class="radio-label">OGG</span>
+                        <div class="radio-border"></div>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Selección de calidad -->
+            <div class="form-group">
+                <label for="quality">Calidad de Audio</label>
+                <select id="quality">
+                    <option value="high">Alta Calidad (256kbps)</option>
+                    <option value="medium">Calidad Media (192kbps)</option>
+                    <option value="low">Calidad Baja (128kbps)</option>
+                </select>
+            </div>
+            
+            <!-- Botón de acción -->
+            <button id="download-btn" class="btn" disabled>
+                <span class="icon">⬇️</span>
+                <span>Descargar Audio</span>
+            </button>
+            
+            <!-- Indicador de progreso -->
+            <div class="progress-container" id="progress-container">
+                <div class="progress-header">
+                    <span id="status-message">Inicializando...</span>
+                    <span id="progress-percentage">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <p class="progress-message" id="progress-message">Conectando con YouTube...</p>
+            </div>
+            
+            <!-- Resultados de descarga (éxito/error) -->
+            <div class="result-container" id="result-container">
+                <!-- Contenedor de resultado exitoso (oculto por defecto) -->
+                <div class="result-success" id="success-container" style="display: none;">
+                    <span class="icon">✅</span>
+                    <div>
+                        <p class="result-title">¡Descarga Completa!</p>
+                        <p class="result-message" id="success-message">Tu archivo de audio ha sido descargado en formato MP3.</p>
+                    </div>
+                </div>
+                
+                <!-- Contenedor de error (oculto por defecto) -->
+                <div class="result-error" id="error-container" style="display: none;">
+                    <span class="icon">⚠️</span>
+                    <div>
+                        <p class="result-title">Error en la Descarga</p>
+                        <p class="result-message" id="error-message">Algo salió mal durante el proceso de descarga.</p>
+                    </div>
+                </div>
+                
+                <!-- Acciones de resultado -->
+                <div class="result-actions">
+                    <button class="result-btn" id="retry-btn" style="display: none;">
+                        <span class="icon">🔄</span>
+                        <span>Intentar de Nuevo</span>
+                    </button>
+                    <button class="result-btn" id="reset-btn" style="display: none;">
+                        <span class="icon">🔄</span>
+                        <span>Convertir Otro Video</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Caja de información -->
+        <div class="info-box">
+            <details>
+                <summary class="info-summary">
+                    <div class="info-title">
+                        <span class="icon">ℹ️</span>
+                        <span>¿Cómo funciona esto?</span>
+                    </div>
+                    <span class="icon info-arrow">▼</span>
+                </summary>
+                <div class="info-content">
+                    <p>Esta herramienta te permite extraer audio de videos de YouTube para uso personal:</p>
+                    <ol class="info-list">
+                        <li>Pega una URL válida de un video de YouTube</li>
+                        <li>Selecciona tu formato y calidad de audio preferidos</li>
+                        <li>Haz clic en el botón de descarga y espera el procesamiento</li>
+                        <li>Tu navegador descargará automáticamente el archivo de audio</li>
+                    </ol>
+                    <p class="info-note">Nota: Por favor respeta las leyes de derechos de autor y los Términos de Servicio de YouTube.</p>
+                </div>
+            </details>
+        </div>
+    </div>
+    
+    <p class="footer">Esta herramienta es solo para fines educativos</p>
+    
+    <!-- Script JavaScript integrado -->
+    <script>
+        // Variables y elementos del DOM
+        const urlInput = document.getElementById('youtube-url');
+        const urlError = document.getElementById('url-error');
+        const checkIcon = document.querySelector('.check-icon');
+        const errorIcon = document.querySelector('.error-icon');
+        const downloadBtn = document.getElementById('download-btn');
+        const progressContainer = document.getElementById('progress-container');
+        const progressFill = document.getElementById('progress-fill');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const statusMessage = document.getElementById('status-message');
+        const progressMessage = document.getElementById('progress-message');
+        const resultContainer = document.getElementById('result-container');
+        const successContainer = document.getElementById('success-container');
+        const errorContainer = document.getElementById('error-container');
+        const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+        const retryBtn = document.getElementById('retry-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        
+        // Estado de la aplicación
+        let isValidUrl = false;
+        let downloadStatus = 'idle'; // 'idle', 'processing', 'complete', 'error'
+        
+        // Función para validar URL de YouTube
+        function validateYouTubeUrl(url) {
+            if (!url) return false;
+            
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(&.*)?$/;
+            return youtubeRegex.test(url);
+        }
+        
+        // Función para extraer el ID del video de YouTube
+        function getYoutubeVideoId(url) {
+            if (!validateYouTubeUrl(url)) return null;
+            
+            // Extraer ID del video de la URL
+            const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+            return match ? match[1] : null;
+        }
+        
+        // Evento de entrada para validar URL
+        urlInput.addEventListener('input', function() {
+            const url = this.value.trim();
+            isValidUrl = validateYouTubeUrl(url);
+            
+            // Mostrar/ocultar iconos de estado
+            if (url) {
+                checkIcon.style.display = isValidUrl ? 'block' : 'none';
+                errorIcon.style.display = isValidUrl ? 'none' : 'block';
+                urlError.style.display = isValidUrl ? 'none' : 'block';
+            } else {
+                checkIcon.style.display = 'none';
+                errorIcon.style.display = 'none';
+                urlError.style.display = 'none';
+            }
+            
+            // Habilitar/deshabilitar botón de descarga
+            downloadBtn.disabled = !isValidUrl || downloadStatus === 'processing';
+        });
+        
+        // Función para actualizar el progreso
+        function updateProgress(progress) {
+            progressFill.style.width = `${progress}%`;
+            progressPercentage.textContent = `${Math.round(progress)}%`;
+            
+            // Actualizar mensajes basados en el progreso
+            if (progress < 20) {
+                statusMessage.textContent = 'Inicializando...';
+                progressMessage.textContent = 'Conectando con YouTube...';
+            } else if (progress < 40) {
+                statusMessage.textContent = 'Extrayendo audio...';
+                progressMessage.textContent = 'Convirtiendo video a audio...';
+            } else if (progress < 70) {
+                statusMessage.textContent = 'Procesando...';
+                progressMessage.textContent = '¡Ya casi!';
+            } else if (progress < 90) {
+                statusMessage.textContent = 'Finalizando...';
+                progressMessage.textContent = 'Preparando tu descarga...';
+            } else {
+                statusMessage.textContent = 'Completando...';
+                progressMessage.textContent = 'Solo un momento...';
+            }
+        }
+        
+        // Función para simular la descarga
+        function simulateDownload() {
+            return new Promise((resolve, reject) => {
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress > 100) progress = 100;
+                    
+                    updateProgress(progress);
+                    
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        // Simular que a veces falla
+                        const shouldFail = Math.random() < 0.2; // 20% de probabilidad de fallo
+                        if (shouldFail) {
+                            reject(new Error('No se pudo procesar el video. Por favor intenta con otra URL o formato.'));
+                        } else {
+                            resolve();
+                        }
+                    }
+                }, 300);
+            });
+        }
+        
+        // Evento del botón de descarga
+        downloadBtn.addEventListener('click', async function() {
+            if (!isValidUrl) return;
+            
+            const youtubeUrl = urlInput.value.trim();
+            const videoId = getYoutubeVideoId(youtubeUrl);
+            const format = document.querySelector('input[name="format"]:checked').value;
+            const quality = document.getElementById('quality').value;
+            
+            if (!videoId) {
+                alert('URL inválida. Por favor ingresa una URL correcta de YouTube.');
+                return;
+            }
+            
+            // Actualizar estado a 'processing'
+            downloadStatus = 'processing';
+            downloadBtn.disabled = true;
+            
+            // Mostrar contenedor de progreso
+            progressContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            
+            try {
+                // En este punto harías una petición a una API real.
+                // Como estamos en un único archivo HTML, simularemos el proceso y luego
+                // usaremos una redirección a una API o servicio externo para la descarga.
+                
+                // Simulación de progreso
+                await simulateDownload();
+                
+                // En un caso real, aquí redirigirías al usuario a un servicio de descarga de YouTube
+                // Por ejemplo, usando un servicio como ytmp3.cc, y2mate, etc.
+                const redirectUrl = `https://www.y2mate.com/youtube/${videoId}`;
+                window.open(redirectUrl, '_blank');
+                
+                // Marcar como completado
+                downloadStatus = 'complete';
+                
+                // Mostrar mensaje de éxito
+                resultContainer.style.display = 'block';
+                successContainer.style.display = 'block';
+                errorContainer.style.display = 'none';
+                resetBtn.style.display = 'block';
+                retryBtn.style.display = 'none';
+                
+                // Personalizar mensaje de éxito
+                successMessage.textContent = `Tu archivo de audio ha sido descargado en formato ${format.toUpperCase()}.`;
+                
+            } catch (error) {
+                console.error('Error de descarga:', error);
+                
+                // Marcar como error
+                downloadStatus = 'error';
+                
+                // Mostrar mensaje de error
+                resultContainer.style.display = 'block';
+                errorContainer.style.display = 'block';
+                successContainer.style.display = 'none';
+                retryBtn.style.display = 'block';
+                resetBtn.style.display = 'none';
+                
+                // Personalizar mensaje de error
+                errorMessage.textContent = error.message || 'Algo salió mal durante el proceso de descarga.';
+            }
+            
+            // Ocultar progreso
+            progressContainer.style.display = 'none';
+        });
+        
+        // Evento para reintentar descarga
+        retryBtn.addEventListener('click', function() {
+            downloadStatus = 'idle';
+            resultContainer.style.display = 'none';
+            downloadBtn.disabled = !isValidUrl;
+        });
+        
+        // Evento para resetear para otro video
+        resetBtn.addEventListener('click', function() {
+            downloadStatus = 'idle';
+            urlInput.value = '';
+            isValidUrl = false;
+            checkIcon.style.display = 'none';
+            errorIcon.style.display = 'none';
+            urlError.style.display = 'none';
+            resultContainer.style.display = 'none';
+            downloadBtn.disabled = true;
+        });
+
+        // Estilizar la selección de radio buttons
+        const radioInputs = document.querySelectorAll('input[type="radio"]');
+        radioInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                document.querySelectorAll('.radio-circle:after').forEach(circle => {
+                    circle.style.opacity = '0';
+                });
+                this.nextElementSibling.querySelector(':after').style.opacity = '1';
+            });
+        });
+    </script>
+</body>
+</html>
