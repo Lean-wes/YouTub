@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Completa de Programación Web</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #6200ea;
+            --secondary-color: #03dac6;
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --section-bg: #1e1e1e;
+        }
+        
+        body {
+            padding-top: 60px;
+            padding-bottom: 60px;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+        
+        .header {
+            background-color: var(--bg-color);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .section-header {
+            background-color: var(--section-bg);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .section-content {
+            background-color: rgba(30, 30, 30, 0.7);
+            border-radius: 0 0 8px 8px;
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        
+        .section-content-inner {
+            padding: 20px;
+        }
+        
+        .subsection {
+            margin-bottom: 30px;
+        }
+        
+        .subsection h3 {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        pre[class*="language-"] {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        code {
+            background-color: rgba(40, 40, 40, 0.7);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        .toggle-icon {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--section-bg);
+            color: var(--text-color);
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--section-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .search-result-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .search-result-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .search-result-item a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: block;
+        }
+        
+        .difficulty-container {
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+        
+        .difficulty-label {
+            margin-right: 10px;
+            opacity: 0.7;
+        }
+        
+        .difficulty-indicator {
+            display: flex;
+        }
+        
+        .difficulty-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            margin-right: 3px;
+        }
+        
+        .difficulty-dot.active {
+            background-color: var(--secondary-color);
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: transparent;
+            text-decoration: none;
+            display: none;
+            z-index: 1000;
+            padding: 0;
+        }
+        
+        .back-to-top-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgb(218, 165, 32);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .back-to-top:hover .back-to-top-icon {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+        
+        .back-to-top svg {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .navigation-controls {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .btn-control {
+            margin: 0 5px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding-top: 20px;
+            }
+            
+            .section-header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .subsection h3 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="mb-5 text-center">
+            <h1 class="display-4 mb-4">Guía Completa de Programación Web</h1>
+            <p class="lead">Todo lo que un programador web debe saber</p>
+        </header>
+        
+        <div id="search-container" class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="Buscar temas...">
+            <div id="search-results" class="search-results"></div>
+        </div>
+        
+        <div class="navigation-controls">
+            <button id="expand-all" class="btn btn-sm btn-outline-secondary btn-control">Expandir Todo</button>
+            <button id="collapse-all" class="btn btn-sm btn-outline-secondary btn-control">Colapsar Todo</button>
+        </div>
+        
+        <main>
+            <!-- Sección 1: Fundamentos de HTML -->
+            <div class="content-section" id="html-basics">
+                <div class="section-header">
+                    <h2><span class="section-icon">📄</span> Fundamentos de HTML</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="html-intro">
+                            <h3>Introducción a HTML</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="1"></div>
+                            </div>
+                            <p>HTML (HyperText Markup Language) es el lenguaje estándar para crear páginas web. Define la estructura básica de una página web mediante una serie de elementos o etiquetas.</p>
+                            <p>Estructura básica de un documento HTML:</p>
+                            <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Título de la página&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Este es un encabezado&lt;/h1&gt;
+    &lt;p&gt;Este es un párrafo.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                        </div>
+
+                        <div class="subsection" id="html-elements">
+                            <h3>Elementos HTML</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="2"></div>
+                            </div>
+                            <p>Los elementos HTML están definidos por etiquetas. Las etiquetas vienen en pares: una etiqueta de apertura y una de cierre.</p>
+                            
+                            <h4 class="mt-4">Encabezados</h4>
+                            <p>HTML ofrece seis niveles de encabezados, de h1 a h6:</p>
+                            <pre><code class="language-html">&lt;h1&gt;Encabezado 1&lt;/h1&gt;
+&lt;h2&gt;Encabezado 2&lt;/h2&gt;
+&lt;h3&gt;Encabezado 3&lt;/h3&gt;
+&lt;h4&gt;Encabezado 4&lt;/h4&gt;
+&lt;h5&gt;Encabezado 5&lt;/h5&gt;
+&lt;h6&gt;Encabezado 6&lt;/h6&gt;</code></pre>
+                            
+                            <h4 class="mt-4">Párrafos</h4>
+                            <pre><code class="language-html">&lt;p&gt;Este es un párrafo.&lt;/p&gt;</code></pre>
+                            
+                            <h4 class="mt-4">Enlaces</h4>
+                            <pre><code class="language-html">&lt;a href="https://www.ejemplo.com"&gt;Visita nuestro sitio&lt;/a&gt;</code></pre>
+                            
+                            <h4 class="mt-4">Imágenes</h4>
+                            <pre><code class="language-html">&lt;img src="imagen.jpg" alt="Descripción de la imagen"&gt;</code></pre>
+                            
+                            <h4 class="mt-4">Listas</h4>
+                            <p>Listas ordenadas:</p>
+                            <pre><code class="language-html">&lt;ol&gt;
+    &lt;li&gt;Primer elemento&lt;/li&gt;
+    &lt;li&gt;Segundo elemento&lt;/li&gt;
+    &lt;li&gt;Tercer elemento&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+                            
+                            <p>Listas no ordenadas:</p>
+                            <pre><code class="language-html">&lt;ul&gt;
+    &lt;li&gt;Elemento&lt;/li&gt;
+    &lt;li&gt;Otro elemento&lt;/li&gt;
+    &lt;li&gt;Un elemento más&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 2: CSS -->
+            <div class="content-section" id="css-basics">
+                <div class="section-header">
+                    <h2><span class="section-icon">🎨</span> CSS: Estilizando la Web</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="css-intro">
+                            <h3>Introducción a CSS</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="2"></div>
+                            </div>
+                            <p>CSS (Cascading Style Sheets) es el lenguaje utilizado para describir la presentación de documentos HTML. Permite controlar el diseño, colores, fuentes y disposición de los elementos en una página web.</p>
+                            
+                            <h4 class="mt-4">Formas de incluir CSS</h4>
+                            <p>1. CSS Interno (en el head del documento HTML):</p>
+                            <pre><code class="language-html">&lt;head&gt;
+    &lt;style&gt;
+        body {
+            background-color: lightblue;
+        }
+        h1 {
+            color: navy;
+            margin-left: 20px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;</code></pre>
+
+                            <p>2. CSS Externo (en un archivo separado):</p>
+                            <pre><code class="language-html">&lt;head&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;</code></pre>
+
+                            <p>3. CSS en línea (directamente en el elemento HTML):</p>
+                            <pre><code class="language-html">&lt;h1 style="color: blue; margin-left: 30px;"&gt;Título&lt;/h1&gt;</code></pre>
+                        </div>
+
+                        <div class="subsection" id="css-selectors">
+                            <h3>Selectores CSS</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="3"></div>
+                            </div>
+                            <p>Los selectores CSS permiten seleccionar y modificar elementos HTML específicos:</p>
+                            
+                            <h4 class="mt-4">Selector de elemento</h4>
+                            <pre><code class="language-css">p {
+    color: red;
+    text-align: center;
+}</code></pre>
+
+                            <h4 class="mt-4">Selector de ID</h4>
+                            <pre><code class="language-css">#mi-id {
+    background-color: lightblue;
+}</code></pre>
+
+                            <h4 class="mt-4">Selector de clase</h4>
+                            <pre><code class="language-css">.mi-clase {
+    font-size: 16px;
+    margin: 10px;
+}</code></pre>
+
+                            <h4 class="mt-4">Selectores combinados</h4>
+                            <pre><code class="language-css">div p {
+    /* Selecciona todos los párrafos dentro de divs */
+    color: blue;
+}
+
+.container > p {
+    /* Selecciona párrafos que son hijos directos de elementos con clase container */
+    font-weight: bold;
+}
+
+h2 + p {
+    /* Selecciona párrafos que son adyacentes directos a h2 */
+    color: green;
+}
+
+a[href^="https"] {
+    /* Selecciona enlaces que comienzan con https */
+    color: purple;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 3: JavaScript -->
+            <div class="content-section" id="js-basics">
+                <div class="section-header">
+                    <h2><span class="section-icon">📱</span> JavaScript: Programación del Lado del Cliente</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="js-intro">
+                            <h3>Introducción a JavaScript</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="3"></div>
+                            </div>
+                            <p>JavaScript es un lenguaje de programación que permite implementar funciones complejas en páginas web. Cada vez que una página web hace más que simplemente mostrar información estática (como mostrar contenido actualizado, mapas interactivos, animaciones, etc.), JavaScript probablemente está involucrado.</p>
+                            
+                            <h4 class="mt-4">Cómo incluir JavaScript</h4>
+                            <pre><code class="language-html">&lt;!-- Interno --&gt;
+&lt;script&gt;
+    console.log("Hola mundo");
+&lt;/script&gt;
+
+&lt;!-- Externo --&gt;
+&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
+
+                            <h4 class="mt-4">Variables y Tipos de Datos</h4>
+                            <pre><code class="language-javascript">// Variables con let y const
+let nombre = "María"; // String
+const edad = 30;      // Number
+let esMayor = true;   // Boolean
+let colores = ["rojo", "verde", "azul"]; // Array
+let persona = {       // Object
+    nombre: "Juan",
+    edad: 25,
+    profesion: "Desarrollador"
+};</code></pre>
+
+                            <h4 class="mt-4">Funciones</h4>
+                            <pre><code class="language-javascript">// Función declarativa
+function saludar(nombre) {
+    return `Hola, ${nombre}!`;
+}
+
+// Función de expresión
+const despedir = function(nombre) {
+    return `Adiós, ${nombre}!`;
+};
+
+// Función de flecha
+const multiplicar = (a, b) => a * b;</code></pre>
+                        </div>
+
+                        <div class="subsection" id="js-dom">
+                            <h3>DOM (Document Object Model)</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>El DOM es una representación en memoria de un documento HTML que permite a JavaScript acceder y manipular el contenido, estructura y estilos de una página web.</p>
+                            
+                            <h4 class="mt-4">Seleccionar elementos</h4>
+                            <pre><code class="language-javascript">// Por ID
+const elemento = document.getElementById('mi-id');
+
+// Por clase
+const elementos = document.getElementsByClassName('mi-clase');
+
+// Por etiqueta
+const parrafos = document.getElementsByTagName('p');
+
+// Con selectores CSS (devuelve el primer elemento que coincide)
+const primerElemento = document.querySelector('.container p');
+
+// Con selectores CSS (devuelve todos los elementos que coinciden)
+const todosElementos = document.querySelectorAll('.container p');</code></pre>
+
+                            <h4 class="mt-4">Modificar elementos</h4>
+                            <pre><code class="language-javascript">// Cambiar contenido
+elemento.textContent = 'Nuevo texto';
+elemento.innerHTML = '&lt;strong&gt;Texto en negrita&lt;/strong&gt;';
+
+// Cambiar atributos
+elemento.setAttribute('src', 'nueva-imagen.jpg');
+elemento.id = 'nuevo-id';
+
+// Cambiar estilos
+elemento.style.color = 'red';
+elemento.style.fontSize = '16px';
+
+// Añadir/eliminar clases
+elemento.classList.add('clase-nueva');
+elemento.classList.remove('clase-antigua');
+elemento.classList.toggle('clase-toggle');</code></pre>
+
+                            <h4 class="mt-4">Crear y añadir elementos</h4>
+                            <pre><code class="language-javascript">// Crear elemento
+const nuevoElemento = document.createElement('div');
+nuevoElemento.textContent = 'Soy un nuevo elemento';
+nuevoElemento.className = 'mi-clase';
+
+// Añadir elemento al DOM
+document.body.appendChild(nuevoElemento);
+
+// Insertar antes de otro elemento
+const elementoReferencia = document.getElementById('referencia');
+elementoReferencia.parentNode.insertBefore(nuevoElemento, elementoReferencia);</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 4: Desarrollo Backend -->
+            <div class="content-section" id="backend-basics">
+                <div class="section-header">
+                    <h2><span class="section-icon">🖥️</span> Desarrollo Backend</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="backend-intro">
+                            <h3>Introducción al Backend</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>El desarrollo backend se refiere a la parte del servidor de una aplicación web. Se encarga de la lógica de negocio, almacenamiento de datos, seguridad y comunicación con el frontend.</p>
+                            
+                            <h4 class="mt-4">Lenguajes y Frameworks</h4>
+                            <ul>
+                                <li><strong>Node.js</strong>: Entorno de ejecución para JavaScript en el servidor (Express.js, Nest.js)</li>
+                                <li><strong>Python</strong>: Lenguaje versátil y legible (Django, Flask)</li>
+                                <li><strong>PHP</strong>: Lenguaje específico para web (Laravel, Symfony)</li>
+                                <li><strong>Java</strong>: Lenguaje robusto y empresarial (Spring Boot)</li>
+                                <li><strong>Ruby</strong>: Lenguaje elegante y productivo (Ruby on Rails)</li>
+                                <li><strong>Go</strong>: Lenguaje eficiente y de alto rendimiento</li>
+                                <li><strong>C#</strong>: Lenguaje de Microsoft (.NET Core)</li>
+                            </ul>
+                        </div>
+
+                        <div class="subsection" id="rest-apis">
+                            <h3>APIs RESTful</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Una API (Interfaz de Programación de Aplicaciones) RESTful es un estilo arquitectónico para diseñar servicios web que utiliza HTTP como protocolo de comunicación y sigue principios específicos.</p>
+                            
+                            <h4 class="mt-4">Principios REST</h4>
+                            <ul>
+                                <li><strong>Recursos</strong>: Todo es un recurso representado por URIs</li>
+                                <li><strong>Métodos HTTP</strong>: Utiliza métodos estándar (GET, POST, PUT, DELETE)</li>
+                                <li><strong>Sin estado</strong>: Cada solicitud debe contener toda la información necesaria</li>
+                                <li><strong>Representación</strong>: Los recursos pueden tener múltiples representaciones (JSON, XML)</li>
+                                <li><strong>HATEOAS</strong>: Hypermedia como motor del estado de la aplicación</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Métodos HTTP comunes</h4>
+                            <ul>
+                                <li><strong>GET</strong>: Recuperar datos</li>
+                                <li><strong>POST</strong>: Crear un nuevo recurso</li>
+                                <li><strong>PUT</strong>: Actualizar un recurso existente</li>
+                                <li><strong>DELETE</strong>: Eliminar un recurso</li>
+                                <li><strong>PATCH</strong>: Actualizar parcialmente un recurso</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Ejemplo de API RESTful (Express.js)</h4>
+                            <pre><code class="language-javascript">const express = require('express');
+const app = express();
+app.use(express.json());
+
+let usuarios = [
+    { id: 1, nombre: 'Ana', edad: 28 },
+    { id: 2, nombre: 'Carlos', edad: 34 }
+];
+
+// GET - Obtener todos los usuarios
+app.get('/api/usuarios', (req, res) => {
+    res.json(usuarios);
+});
+
+// GET - Obtener un usuario específico
+app.get('/api/usuarios/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const usuario = usuarios.find(u => u.id === id);
+    
+    if (!usuario) {
+        return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+    
+    res.json(usuario);
+});
+
+// POST - Crear un nuevo usuario
+app.post('/api/usuarios', (req, res) => {
+    const nuevoUsuario = {
+        id: usuarios.length + 1,
+        nombre: req.body.nombre,
+        edad: req.body.edad
+    };
+    
+    usuarios.push(nuevoUsuario);
+    res.status(201).json(nuevoUsuario);
+});
+
+// PUT - Actualizar un usuario
+app.put('/api/usuarios/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const index = usuarios.findIndex(u => u.id === id);
+    
+    if (index === -1) {
+        return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+    
+    usuarios[index] = {
+        id: id,
+        nombre: req.body.nombre,
+        edad: req.body.edad
+    };
+    
+    res.json(usuarios[index]);
+});
+
+// DELETE - Eliminar un usuario
+app.delete('/api/usuarios/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const index = usuarios.findIndex(u => u.id === id);
+    
+    if (index === -1) {
+        return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+    
+    const usuarioEliminado = usuarios[index];
+    usuarios.splice(index, 1);
+    
+    res.json(usuarioEliminado);
+});
+
+app.listen(3000, () => {
+    console.log('Servidor corriendo en el puerto 3000');
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 5: Bases de Datos -->
+            <div class="content-section" id="databases">
+                <div class="section-header">
+                    <h2><span class="section-icon">🗄️</span> Bases de Datos</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="sql-databases">
+                            <h3>Bases de Datos Relacionales (SQL)</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Las bases de datos relacionales organizan los datos en tablas con filas y columnas, estableciendo relaciones entre ellas mediante claves.</p>
+                            
+                            <h4 class="mt-4">Sistemas Populares</h4>
+                            <ul>
+                                <li><strong>MySQL</strong>: De código abierto, muy utilizado en aplicaciones web</li>
+                                <li><strong>PostgreSQL</strong>: Potente, de código abierto con características avanzadas</li>
+                                <li><strong>SQLite</strong>: Base de datos ligera basada en archivos</li>
+                                <li><strong>SQL Server</strong>: Solución empresarial de Microsoft</li>
+                                <li><strong>Oracle</strong>: Sistema robusto para aplicaciones empresariales</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Comandos SQL Básicos</h4>
+                            <pre><code class="language-sql">-- Crear una tabla
+CREATE TABLE usuarios (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    fecha_registro DATE DEFAULT CURRENT_DATE
+);
+
+-- Insertar datos
+INSERT INTO usuarios (nombre, email) 
+VALUES ('Juan Pérez', 'juan@ejemplo.com');
+
+-- Consultar datos
+SELECT * FROM usuarios;
+SELECT nombre, email FROM usuarios WHERE id = 1;
+
+-- Actualizar datos
+UPDATE usuarios SET nombre = 'Juan Carlos Pérez' WHERE id = 1;
+
+-- Eliminar datos
+DELETE FROM usuarios WHERE id = 1;
+
+-- Joins (uniones)
+SELECT usuarios.nombre, pedidos.producto
+FROM usuarios
+JOIN pedidos ON usuarios.id = pedidos.usuario_id;</code></pre>
+                        </div>
+
+                        <div class="subsection" id="nosql-databases">
+                            <h3>Bases de Datos NoSQL</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Las bases de datos NoSQL están diseñadas para modelos de datos específicos y tienen esquemas flexibles, lo que las hace ideales para datos no estructurados o semiestructurados.</p>
+                            
+                            <h4 class="mt-4">Tipos de Bases de Datos NoSQL</h4>
+                            <ul>
+                                <li><strong>Documentales</strong>: Almacenan datos en documentos similares a JSON (MongoDB)</li>
+                                <li><strong>Clave-valor</strong>: Almacenan pares de clave-valor (Redis, DynamoDB)</li>
+                                <li><strong>Columnares</strong>: Optimizadas para consultas en grandes conjuntos de datos (Cassandra)</li>
+                                <li><strong>Grafo</strong>: Almacenan relaciones entre entidades (Neo4j)</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Ejemplo con MongoDB</h4>
+                            <pre><code class="language-javascript">// Conectar a MongoDB
+const { MongoClient } = require('mongodb');
+const uri = "mongodb://localhost:27017";
+const client = new MongoClient(uri);
+
+async function main() {
+    try {
+        await client.connect();
+        const database = client.db("miApp");
+        const usuarios = database.collection("usuarios");
+        
+        // Insertar un documento
+        const resultado = await usuarios.insertOne({
+            nombre: "Ana García",
+            email: "ana@ejemplo.com",
+            edad: 28,
+            intereses: ["programación", "música", "viajes"]
+        });
+        console.log(`Documento insertado con ID: ${resultado.insertedId}`);
+        
+        // Buscar documentos
+        const consulta = { edad: { $gt: 25 } }; // usuarios mayores de 25 años
+        const usuario = await usuarios.findOne(consulta);
+        console.log(usuario);
+        
+        // Actualizar un documento
+        const filtro = { email: "ana@ejemplo.com" };
+        const actualizacion = {
+            $set: { edad: 29 },
+            $push: { intereses: "fotografía" }
+        };
+        await usuarios.updateOne(filtro, actualizacion);
+        
+        // Eliminar un documento
+        await usuarios.deleteOne({ email: "ana@ejemplo.com" });
+        
+    } finally {
+        await client.close();
+    }
+}
+
+main().catch(console.error);</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 6: Frontend Frameworks -->
+            <div class="content-section" id="frontend-frameworks">
+                <div class="section-header">
+                    <h2><span class="section-icon">🔌</span> Frameworks Frontend</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="react">
+                            <h3>React</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>React es una biblioteca de JavaScript para construir interfaces de usuario. Desarrollada por Facebook, permite crear aplicaciones web de una sola página (SPA) con componentes reutilizables.</p>
+                            
+                            <h4 class="mt-4">Características principales</h4>
+                            <ul>
+                                <li><strong>Componentes</strong>: La arquitectura se basa en componentes reutilizables</li>
+                                <li><strong>Virtual DOM</strong>: Mejora el rendimiento al minimizar las actualizaciones del DOM</li>
+                                <li><strong>Flujo unidireccional de datos</strong>: Los datos fluyen de padres a hijos</li>
+                                <li><strong>JSX</strong>: Extensión de sintaxis que mezcla HTML y JavaScript</li>
+                                <li><strong>Hooks</strong>: Permiten usar estado y otras características de React sin clases</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Ejemplo de componente</h4>
+                            <pre><code class="language-jsx">import React, { useState, useEffect } from 'react';
+
+// Componente funcional con hooks
+function Contador() {
+    // Estado local con useState
+    const [contador, setContador] = useState(0);
+    const [mensaje, setMensaje] = useState('');
+    
+    // Efecto secundario con useEffect
+    useEffect(() => {
+        if (contador > 10) {
+            setMensaje('¡Has llegado a 10!');
+        }
+        // Se ejecuta al desmontar el componente o antes de cada nuevo efecto
+        return () => {
+            console.log('Limpiando efecto');
+        };
+    }, [contador]); // Solo se ejecuta cuando contador cambia
+    
+    const incrementar = () => {
+        setContador(contador + 1);
+    };
+    
+    const decrementar = () => {
+        setContador(contador - 1);
+    };
+    
+    return (
+        <div className="contador-container">
+            <h2>Contador: {contador}</h2>
+            {mensaje && <p>{mensaje}</p>}
+            <button onClick={incrementar}>Incrementar</button>
+            <button onClick={decrementar}>Decrementar</button>
+        </div>
+    );
+}
+
+export default Contador;</code></pre>
+                        </div>
+
+                        <div class="subsection" id="vue">
+                            <h3>Vue.js</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Vue.js es un framework progresivo para construir interfaces de usuario. Está diseñado para ser adoptado incrementalmente y es fácil de integrar con otros proyectos.</p>
+                            
+                            <h4 class="mt-4">Características principales</h4>
+                            <ul>
+                                <li><strong>Sistema de plantillas</strong>: Usa HTML mejorado con directivas</li>
+                                <li><strong>Reactividad</strong>: Sistema de reactividad eficiente y transparente</li>
+                                <li><strong>Componentes</strong>: Organización en componentes reutilizables</li>
+                                <li><strong>Directivas</strong>: Extensiones HTML con prefijo v- (v-if, v-for, etc.)</li>
+                                <li><strong>Vue CLI</strong>: Herramientas para la creación rápida de proyectos</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Ejemplo de componente</h4>
+                            <pre><code class="language-html">&lt;template&gt;
+  &lt;div class="contador-container"&gt;
+    &lt;h2&gt;Contador: {{ contador }}&lt;/h2&gt;
+    &lt;p v-if="mensaje"&gt;{{ mensaje }}&lt;/p&gt;
+    &lt;button @click="incrementar"&gt;Incrementar&lt;/button&gt;
+    &lt;button @click="decrementar"&gt;Decrementar&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: 'Contador',
+  data() {
+    return {
+      contador: 0,
+      mensaje: ''
+    }
+  },
+  watch: {
+    contador(nuevoValor) {
+      if (nuevoValor > 10) {
+        this.mensaje = '¡Has llegado a 10!';
+      }
+    }
+  },
+  methods: {
+    incrementar() {
+      this.contador++;
+    },
+    decrementar() {
+      this.contador--;
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.contador-container {
+  text-align: center;
+  margin: 20px auto;
+  padding: 15px;
+  max-width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  margin: 0 5px;
+  padding: 5px 10px;
+}
+&lt;/style&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 7: Seguridad Web -->
+            <div class="content-section" id="web-security">
+                <div class="section-header">
+                    <h2><span class="section-icon">🔒</span> Seguridad Web</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="common-vulnerabilities">
+                            <h3>Vulnerabilidades Comunes</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="5"></div>
+                            </div>
+                            <p>La seguridad web es crucial para proteger tanto los datos de los usuarios como la integridad de la aplicación. Estas son algunas vulnerabilidades comunes y cómo prevenirlas:</p>
+                            
+                            <h4 class="mt-4">1. Inyección SQL</h4>
+                            <p><strong>Problema</strong>: Los atacantes pueden insertar código SQL malicioso a través de entradas no validadas.</p>
+                            <p><strong>Prevención</strong>: Usar consultas parametrizadas o ORM.</p>
+                            <pre><code class="language-javascript">// Vulnerable
+db.query(`SELECT * FROM usuarios WHERE email = '${email}'`);
+
+// Seguro (consulta parametrizada)
+db.query('SELECT * FROM usuarios WHERE email = ?', [email]);</code></pre>
+                            
+                            <h4 class="mt-4">2. Cross-Site Scripting (XSS)</h4>
+                            <p><strong>Problema</strong>: Los atacantes pueden inyectar scripts maliciosos que se ejecutan en los navegadores de los usuarios.</p>
+                            <p><strong>Prevención</strong>: Escapar o sanitizar la entrada del usuario antes de mostrarla.</p>
+                            <pre><code class="language-javascript">// Vulnerable
+element.innerHTML = userInput;
+
+// Seguro
+element.textContent = userInput; // o usar una biblioteca de sanitización</code></pre>
+                            
+                            <h4 class="mt-4">3. Cross-Site Request Forgery (CSRF)</h4>
+                            <p><strong>Problema</strong>: Fuerza a los usuarios autenticados a ejecutar acciones no deseadas.</p>
+                            <p><strong>Prevención</strong>: Implementar tokens CSRF y validar el origen de las solicitudes.</p>
+                            <pre><code class="language-html">&lt;form action="/transferir" method="post"&gt;
+    &lt;input type="hidden" name="csrf_token" value="token_aleatorio_generado_por_servidor"&gt;
+    &lt;!-- otros campos del formulario --&gt;
+    &lt;button type="submit"&gt;Transferir&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+                            
+                            <h4 class="mt-4">4. Autenticación y Gestión de Sesiones Débiles</h4>
+                            <p><strong>Problema</strong>: Métodos de autenticación inseguros que permiten el acceso no autorizado.</p>
+                            <p><strong>Prevención</strong>:</p>
+                            <ul>
+                                <li>Implementar políticas de contraseñas fuertes</li>
+                                <li>Usar HTTPS para todas las comunicaciones</li>
+                                <li>Implementar autenticación multifactor</li>
+                                <li>Usar tokens JWT con expiración adecuada</li>
+                                <li>Revocar sesiones al cerrar sesión</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">5. Exposición de Datos Sensibles</h4>
+                            <p><strong>Problema</strong>: Información sensible transmitida o almacenada sin cifrar.</p>
+                            <p><strong>Prevención</strong>:</p>
+                            <ul>
+                                <li>Cifrar datos sensibles en reposo y en tránsito</li>
+                                <li>Usar funciones hash seguras para contraseñas (bcrypt, Argon2)</li>
+                                <li>No almacenar datos sensibles innecesariamente</li>
+                            </ul>
+                            <pre><code class="language-javascript">// Cifrado de contraseñas con bcrypt
+const bcrypt = require('bcrypt');
+
+// Almacenar contraseña
+const hashContraseña = async (contraseña) => {
+    const saltRounds = 10;
+    return await bcrypt.hash(contraseña, saltRounds);
+};
+
+// Verificar contraseña
+const verificarContraseña = async (contraseña, hash) => {
+    return await bcrypt.compare(contraseña, hash);
+};</code></pre>
+                        </div>
+
+                        <div class="subsection" id="security-headers">
+                            <h3>Cabeceras de Seguridad HTTP</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Las cabeceras HTTP pueden mejorar significativamente la seguridad de tu aplicación web:</p>
+                            
+                            <h4 class="mt-4">Cabeceras Importantes</h4>
+                            <pre><code class="language-javascript">// Ejemplo en Express.js
+const helmet = require('helmet');
+app.use(helmet()); // Añade varias cabeceras de seguridad
+
+// O configurar manualmente
+app.use((req, res, next) => {
+    // Previene que el navegador MIME-sniff una respuesta de su tipo de contenido declarado
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    
+    // Ayuda a proteger contra ataques XSS
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    
+    // Evita que el sitio aparezca en un iframe (clickjacking)
+    res.setHeader('X-Frame-Options', 'DENY');
+    
+    // Política de seguridad de contenido (CSP)
+    res.setHeader(
+        'Content-Security-Policy',
+        "default-src 'self'; script-src 'self' https://trusted-cdn.com;"
+    );
+    
+    // Strict Transport Security (fuerza HTTPS)
+    res.setHeader(
+        'Strict-Transport-Security',
+        'max-age=31536000; includeSubDomains; preload'
+    );
+    
+    next();
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 8: Despliegue y DevOps -->
+            <div class="content-section" id="deployment">
+                <div class="section-header">
+                    <h2><span class="section-icon">🚀</span> Despliegue y DevOps</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="deployment-options">
+                            <h3>Opciones de Despliegue</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Existen múltiples formas de desplegar aplicaciones web, cada una con sus ventajas y casos de uso:</p>
+                            
+                            <h4 class="mt-4">Hosting Compartido</h4>
+                            <p><strong>Descripción</strong>: Varios sitios web comparten los recursos de un único servidor.</p>
+                            <p><strong>Ventajas</strong>: Económico, fácil de configurar</p>
+                            <p><strong>Desventajas</strong>: Recursos limitados, menos control, posibles problemas de rendimiento</p>
+                            <p><strong>Ejemplos</strong>: Hostinger, Bluehost, GoDaddy</p>
+                            
+                            <h4 class="mt-4">VPS (Servidor Privado Virtual)</h4>
+                            <p><strong>Descripción</strong>: Un servidor virtual dedicado con recursos garantizados.</p>
+                            <p><strong>Ventajas</strong>: Mayor control, recursos dedicados, mejor rendimiento</p>
+                            <p><strong>Desventajas</strong>: Requiere más conocimientos técnicos, más caro que el hosting compartido</p>
+                            <p><strong>Ejemplos</strong>: DigitalOcean, Linode, Vultr</p>
+                            
+                            <h4 class="mt-4">Plataformas como Servicio (PaaS)</h4>
+                            <p><strong>Descripción</strong>: Plataformas que abstraen la infraestructura y permiten centrarse en el código.</p>
+                            <p><strong>Ventajas</strong>: Fácil despliegue, escalabilidad automática, menos administración</p>
+                            <p><strong>Desventajas</strong>: Menos flexibilidad, posiblemente más caro a escala</p>
+                            <p><strong>Ejemplos</strong>: Heroku, Netlify, Vercel, Firebase</p>
+                            
+                            <h4 class="mt-4">Contenedores</h4>
+                            <p><strong>Descripción</strong>: Paquetes ligeros y portables que contienen todo lo necesario para ejecutar la aplicación.</p>
+                            <p><strong>Ventajas</strong>: Consistencia entre entornos, aislamiento, eficiencia de recursos</p>
+                            <p><strong>Desventajas</strong>: Curva de aprendizaje, complejidad añadida</p>
+                            <p><strong>Ejemplos</strong>: Docker, Kubernetes</p>
+                            
+                            <h4 class="mt-4">Serverless</h4>
+                            <p><strong>Descripción</strong>: El código se ejecuta en respuesta a eventos sin necesidad de gestionar servidores.</p>
+                            <p><strong>Ventajas</strong>: Pago por uso, escalado automático, menos mantenimiento</p>
+                            <p><strong>Desventajas</strong>: Cold starts, límites de tiempo de ejecución, posible vendor lock-in</p>
+                            <p><strong>Ejemplos</strong>: AWS Lambda, Azure Functions, Google Cloud Functions</p>
+                        </div>
+
+                        <div class="subsection" id="ci-cd">
+                            <h3>Integración Continua y Despliegue Continuo (CI/CD)</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="5"></div>
+                            </div>
+                            <p>CI/CD es una práctica de desarrollo que implica la integración frecuente de código y la entrega automatizada de cambios a producción.</p>
+                            
+                            <h4 class="mt-4">Componentes</h4>
+                            <ul>
+                                <li><strong>Integración Continua (CI)</strong>: Verificación automática de cada cambio mediante pruebas</li>
+                                <li><strong>Entrega Continua (CD)</strong>: Automatización del proceso de publicación para su despliegue manual</li>
+                                <li><strong>Despliegue Continuo</strong>: Automatización completa hasta la puesta en producción</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Beneficios</h4>
+                            <ul>
+                                <li>Detección temprana de errores</li>
+                                <li>Retroalimentación rápida</li>
+                                <li>Reducción de riesgos en los despliegues</li>
+                                <li>Entregas más frecuentes y predecibles</li>
+                                <li>Menor esfuerzo manual</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Ejemplo: GitHub Actions</h4>
+                            <pre><code class="language-yaml">name: Node.js CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests
+      run: npm test
+      
+    - name: Run linter
+      run: npm run lint
+  
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build
+      run: npm run build
+      
+    - name: Deploy to production
+      uses: some-deployment-action@v1
+      with:
+        api-key: ${ { secrets.DEPLOY_API_KEY } }
+        app-name: 'my-app-production'</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sección 9: Rendimiento Web -->
+            <div class="content-section" id="web-performance">
+                <div class="section-header">
+                    <h2><span class="section-icon">⚡</span> Rendimiento Web</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="performance-metrics">
+                            <h3>Métricas de Rendimiento</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Las métricas de rendimiento web son esenciales para medir la experiencia del usuario:</p>
+                            
+                            <h4 class="mt-4">Métricas Clave</h4>
+                            <ul>
+                                <li><strong>First Contentful Paint (FCP)</strong>: Tiempo hasta que se muestra el primer contenido</li>
+                                <li><strong>Largest Contentful Paint (LCP)</strong>: Tiempo hasta que se muestra el contenido principal</li>
+                                <li><strong>First Input Delay (FID)</strong>: Tiempo hasta que la página responde a la primera interacción</li>
+                                <li><strong>Cumulative Layout Shift (CLS)</strong>: Medida de inestabilidad visual de la página</li>
+                                <li><strong>Time to Interactive (TTI)</strong>: Tiempo hasta que la página es completamente interactiva</li>
+                                <li><strong>Total Blocking Time (TBT)</strong>: Tiempo total en que el hilo principal está bloqueado</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Herramientas de Medición</h4>
+                            <ul>
+                                <li><strong>Lighthouse</strong>: Auditoría automatizada de rendimiento, accesibilidad y más</li>
+                                <li><strong>WebPageTest</strong>: Pruebas detalladas de rendimiento desde múltiples ubicaciones</li>
+                                <li><strong>Chrome DevTools</strong>: Herramientas integradas en el navegador para análisis de rendimiento</li>
+                                <li><strong>Core Web Vitals</strong>: Métricas estandarizadas por Google (LCP, FID, CLS)</li>
+                            </ul>
+                        </div>
+
+                        <div class="subsection" id="performance-optimization">
+                            <h3>Optimización de Rendimiento</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="5"></div>
+                            </div>
+                            <p>Técnicas para mejorar el rendimiento de aplicaciones web:</p>
+                            
+                            <h4 class="mt-4">Optimización de Recursos</h4>
+                            <ul>
+                                <li><strong>Minificación</strong>: Reducir el tamaño de archivos CSS, JavaScript y HTML</li>
+                                <li><strong>Compresión</strong>: Usar Gzip o Brotli para reducir el tamaño de transferencia</li>
+                                <li><strong>Optimización de imágenes</strong>: Usar formatos modernos (WebP, AVIF), dimensiones apropiadas y lazy loading</li>
+                                <li><strong>Tree shaking</strong>: Eliminar código no utilizado del paquete final</li>
+                                <li><strong>Code splitting</strong>: Dividir el código en paquetes más pequeños cargados bajo demanda</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Optimización de Entrega</h4>
+                            <ul>
+                                <li><strong>CDN (Content Delivery Network)</strong>: Distribuir contenido en servidores cercanos al usuario</li>
+                                <li><strong>Caching</strong>: Implementar estrategias de caché a nivel de navegador y servidor</li>
+                                <li><strong>Priorización de recursos críticos</strong>: Cargar primero lo esencial para el renderizado</li>
+                                <li><strong>Precarga y prefetch</strong>: Indicar al navegador qué recursos cargar anticipadamente</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Optimización de Renderizado</h4>
+                            <ul>
+                                <li><strong>CSS crítico</strong>: Incluir el CSS esencial en línea y cargar el resto de forma asíncrona</li>
+                                <li><strong>Reducir bloqueo de renderizado</strong>: Cargar JavaScript de forma asíncrona o diferida</li>
+                                <li><strong>Evitar reflows y repaints</strong>: Minimizar cambios en el DOM que provoquen recálculos</li>
+                                <li><strong>Virtualización</strong>: Renderizar solo los elementos visibles en listas largas</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Ejemplo: Carga diferida de imágenes</h4>
+                            <pre><code class="language-html">&lt;!-- Usando el atributo loading nativo --&gt;
+&lt;img src="imagen.jpg" loading="lazy" alt="Descripción"&gt;
+
+&lt;!-- Usando Intersection Observer (JavaScript) --&gt;
+&lt;img data-src="imagen.jpg" class="lazy" alt="Descripción"&gt;
+
+&lt;script&gt;
+document.addEventListener("DOMContentLoaded", function() {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const image = entry.target;
+                image.src = image.dataset.src;
+                observer.unobserve(image);
+            }
+        });
+    });
+    
+    document.querySelectorAll('img.lazy').forEach(img => {
+        imageObserver.observe(img);
+    });
+});
+&lt;/script&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 10: Arquitectura de Software -->
+            <div class="content-section" id="software-architecture">
+                <div class="section-header">
+                    <h2><span class="section-icon">🏗️</span> Arquitectura de Software</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="architecture-patterns">
+                            <h3>Patrones Arquitectónicos</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="5"></div>
+                            </div>
+                            <p>Los patrones arquitectónicos son soluciones generales y reutilizables para problemas comunes en el diseño de software.</p>
+                            
+                            <h4 class="mt-4">MVC (Modelo-Vista-Controlador)</h4>
+                            <p>Separa la aplicación en tres componentes interconectados:</p>
+                            <ul>
+                                <li><strong>Modelo</strong>: Representa los datos y la lógica de negocio</li>
+                                <li><strong>Vista</strong>: Presenta la información al usuario (interfaz)</li>
+                                <li><strong>Controlador</strong>: Maneja las interacciones del usuario y actualiza el modelo y la vista</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">MVVM (Modelo-Vista-ViewModel)</h4>
+                            <p>Evolución del MVC utilizada en aplicaciones con interfaces complejas:</p>
+                            <ul>
+                                <li><strong>Modelo</strong>: Datos y lógica de negocio</li>
+                                <li><strong>Vista</strong>: Interfaz de usuario</li>
+                                <li><strong>ViewModel</strong>: Intermediario que convierte los datos del modelo para la vista y maneja la lógica de presentación</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Arquitectura de Microservicios</h4>
+                            <p>Estructura una aplicación como un conjunto de servicios pequeños e independientes:</p>
+                            <ul>
+                                <li>Cada servicio se ejecuta en su propio proceso</li>
+                                <li>Comunicación a través de APIs ligeras (generalmente HTTP/REST)</li>
+                                <li>Despliegue independiente de cada servicio</li>
+                                <li>Diferentes servicios pueden usar diferentes tecnologías y bases de datos</li>
+                                <li>Escalado granular (solo los servicios que lo necesiten)</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Arquitectura Serverless</h4>
+                            <p>Permite construir aplicaciones sin gestionar la infraestructura subyacente:</p>
+                            <ul>
+                                <li>Las funciones se activan por eventos</li>
+                                <li>Ejecución en entornos efímeros y sin estado</li>
+                                <li>Escalado automático y pago por uso</li>
+                                <li>Enfoque en la lógica de negocio en lugar de la infraestructura</li>
+                            </ul>
+                        </div>
+
+                        <div class="subsection" id="design-patterns">
+                            <h3>Patrones de Diseño</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="5"></div>
+                            </div>
+                            <p>Los patrones de diseño son soluciones probadas para problemas recurrentes en el diseño de software.</p>
+                            
+                            <h4 class="mt-4">Patrones Creacionales</h4>
+                            <ul>
+                                <li><strong>Singleton</strong>: Garantiza una única instancia de una clase</li>
+                                <li><strong>Factory Method</strong>: Define una interfaz para crear objetos, pero permite a las subclases decidir qué clase instanciar</li>
+                                <li><strong>Builder</strong>: Separa la construcción de objetos complejos de su representación</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Patrones Estructurales</h4>
+                            <ul>
+                                <li><strong>Adapter</strong>: Permite que interfaces incompatibles trabajen juntas</li>
+                                <li><strong>Decorator</strong>: Añade responsabilidades a objetos dinámicamente</li>
+                                <li><strong>Facade</strong>: Proporciona una interfaz unificada a un conjunto de interfaces en un subsistema</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Patrones de Comportamiento</h4>
+                            <ul>
+                                <li><strong>Observer</strong>: Define una dependencia uno-a-muchos entre objetos</li>
+                                <li><strong>Strategy</strong>: Define una familia de algoritmos, encapsula cada uno y los hace intercambiables</li>
+                                <li><strong>Command</strong>: Encapsula una solicitud como un objeto</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Ejemplo: Patrón Observer (JavaScript)</h4>
+                            <pre><code class="language-javascript">class Subject {
+    constructor() {
+        this.observers = [];
+    }
+    
+    subscribe(observer) {
+        this.observers.push(observer);
+    }
+    
+    unsubscribe(observer) {
+        this.observers = this.observers.filter(obs => obs !== observer);
+    }
+    
+    notify(data) {
+        this.observers.forEach(observer => observer.update(data));
+    }
+}
+
+class Observer {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    update(data) {
+        console.log(`${this.name} recibió: ${data}`);
+    }
+}
+
+// Uso
+const subject = new Subject();
+
+const observer1 = new Observer("Observer 1");
+const observer2 = new Observer("Observer 2");
+
+subject.subscribe(observer1);
+subject.subscribe(observer2);
+
+subject.notify("¡Datos actualizados!");
+// Observer 1 recibió: ¡Datos actualizados!
+// Observer 2 recibió: ¡Datos actualizados!
+
+subject.unsubscribe(observer1);
+subject.notify("Más actualizaciones");
+// Observer 2 recibió: Más actualizaciones</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 11: Testing -->
+            <div class="content-section" id="testing">
+                <div class="section-header">
+                    <h2><span class="section-icon">🧪</span> Testing y Calidad de Código</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="testing-types">
+                            <h3>Tipos de Pruebas</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Las pruebas son esenciales para asegurar la calidad del software y prevenir regresiones.</p>
+                            
+                            <h4 class="mt-4">Pruebas Unitarias</h4>
+                            <p>Verifican que componentes individuales (funciones, clases) funcionen correctamente de forma aislada.</p>
+                            <pre><code class="language-javascript">// Ejemplo con Jest
+function sumar(a, b) {
+    return a + b;
+}
+
+test('sumar 1 + 2 debería ser 3', () => {
+    expect(sumar(1, 2)).toBe(3);
+});</code></pre>
+                            
+                            <h4 class="mt-4">Pruebas de Integración</h4>
+                            <p>Verifican que diferentes partes del sistema funcionen correctamente juntas.</p>
+                            <pre><code class="language-javascript">// Ejemplo de prueba de integración con Supertest para API
+const request = require('supertest');
+const app = require('../app');
+
+describe('API de usuarios', () => {
+    test('GET /api/usuarios debería devolver estado 200', async () => {
+        const response = await request(app).get('/api/usuarios');
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveLength(2);
+    });
+});</code></pre>
+                            
+                            <h4 class="mt-4">Pruebas E2E (End-to-End)</h4>
+                            <p>Simulan el comportamiento real del usuario interactuando con la aplicación completa.</p>
+                            <pre><code class="language-javascript">// Ejemplo con Cypress
+describe('Formulario de login', () => {
+    it('debería iniciar sesión con credenciales válidas', () => {
+        cy.visit('/login');
+        cy.get('input[name=email]').type('usuario@ejemplo.com');
+        cy.get('input[name=password]').type('contraseña123');
+        cy.get('button[type=submit]').click();
+        cy.url().should('include', '/dashboard');
+        cy.contains('Bienvenido, Usuario').should('be.visible');
+    });
+});</code></pre>
+                            
+                            <h4 class="mt-4">Otros Tipos de Pruebas</h4>
+                            <ul>
+                                <li><strong>Pruebas de Carga/Rendimiento</strong>: Evalúan cómo se comporta el sistema bajo carga</li>
+                                <li><strong>Pruebas de Seguridad</strong>: Identifican vulnerabilidades y fallos de seguridad</li>
+                                <li><strong>Pruebas de Accesibilidad</strong>: Verifican que la aplicación sea accesible para todos los usuarios</li>
+                                <li><strong>Pruebas de Usabilidad</strong>: Evalúan la experiencia del usuario</li>
+                            </ul>
+                        </div>
+
+                        <div class="subsection" id="tdd-bdd">
+                            <h3>TDD y BDD</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Metodologías de desarrollo guiadas por pruebas y comportamiento.</p>
+                            
+                            <h4 class="mt-4">TDD (Test-Driven Development)</h4>
+                            <p>Proceso de desarrollo que se basa en escribir pruebas antes del código:</p>
+                            <ol>
+                                <li>Escribir una prueba que falla para una nueva funcionalidad</li>
+                                <li>Escribir el código mínimo necesario para pasar la prueba</li>
+                                <li>Refactorizar el código manteniendo las pruebas en verde</li>
+                                <li>Repetir el ciclo</li>
+                            </ol>
+                            
+                            <h4 class="mt-4">BDD (Behavior-Driven Development)</h4>
+                            <p>Extensión de TDD que se enfoca en el comportamiento desde la perspectiva del usuario:</p>
+                            <ul>
+                                <li>Usa lenguaje natural para describir características y escenarios</li>
+                                <li>Facilita la colaboración entre desarrolladores, QA y stakeholders</li>
+                                <li>Las especificaciones se pueden automatizar como pruebas</li>
+                            </ul>
+                            <pre><code class="language-gherkin"># Ejemplo de escenario BDD con Gherkin
+Feature: Login de usuarios
+  Como usuario registrado
+  Quiero iniciar sesión en la aplicación
+  Para acceder a mis datos personales
+
+  Scenario: Login exitoso
+    Given soy un usuario registrado
+    When introduzco mi email "usuario@ejemplo.com"
+    And introduzco mi contraseña "contraseña123"
+    And hago clic en el botón Iniciar sesión
+    Then debería ver la página de dashboard
+    And debería ver un mensaje "Bienvenido, Usuario"</code></pre>
+                        </div>
+
+                        <div class="subsection" id="code-quality">
+                            <h3>Calidad de Código</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Herramientas y prácticas para mantener un código limpio y mantenible.</p>
+                            
+                            <h4 class="mt-4">Linters y Formatters</h4>
+                            <ul>
+                                <li><strong>ESLint</strong>: Analiza el código JavaScript para encontrar problemas</li>
+                                <li><strong>Prettier</strong>: Formatea automáticamente el código</li>
+                                <li><strong>Stylelint</strong>: Linter para CSS</li>
+                            </ul>
+                            <pre><code class="language-json">// Ejemplo de configuración de ESLint (.eslintrc)
+{
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "rules": {
+    "no-console": "warn",
+    "prefer-const": "error",
+    "no-unused-vars": "error"
+  }
+}</code></pre>
+                            
+                            <h4 class="mt-4">Code Review</h4>
+                            <p>Proceso de revisión sistemática del código por pares para:</p>
+                            <ul>
+                                <li>Encontrar errores y bugs</li>
+                                <li>Mejorar la calidad del código</li>
+                                <li>Compartir conocimiento entre el equipo</li>
+                                <li>Asegurar la consistencia y cumplimiento de estándares</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Métricas de Código</h4>
+                            <ul>
+                                <li><strong>Complejidad ciclomática</strong>: Mide la complejidad de un módulo</li>
+                                <li><strong>Cobertura de pruebas</strong>: Porcentaje de código cubierto por pruebas</li>
+                                <li><strong>Deuda técnica</strong>: Valor estimado del trabajo pendiente por refactorización</li>
+                                <li><strong>Duplicación de código</strong>: Porcentaje de código duplicado</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 12: Progresive Web Apps y Tecnologías Avanzadas -->
+            <div class="content-section" id="advanced-tech">
+                <div class="section-header">
+                    <h2><span class="section-icon">🔮</span> PWA y Tecnologías Avanzadas</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="pwa">
+                            <h3>Progressive Web Apps (PWA)</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Las PWA son aplicaciones web que ofrecen una experiencia similar a las aplicaciones nativas.</p>
+                            
+                            <h4 class="mt-4">Características de las PWA</h4>
+                            <ul>
+                                <li><strong>Progresivas</strong>: Funcionan para cualquier usuario, independientemente del navegador</li>
+                                <li><strong>Responsivas</strong>: Se adaptan a cualquier factor de forma</li>
+                                <li><strong>Independientes de conectividad</strong>: Funcionan offline o con conexiones lentas</li>
+                                <li><strong>App-like</strong>: Se comportan como aplicaciones nativas</li>
+                                <li><strong>Actualizadas</strong>: Siempre están al día gracias a los Service Workers</li>
+                                <li><strong>Seguras</strong>: Servidas a través de HTTPS</li>
+                                <li><strong>Detectables</strong>: Identificables como "aplicaciones" gracias a los manifiestos W3C</li>
+                                <li><strong>Instalables</strong>: Permiten añadir apps a la pantalla de inicio</li>
+                                <li><strong>Enlazables</strong>: Fácilmente compartibles mediante URLs</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Componentes Principales</h4>
+                            <p><strong>Web App Manifest</strong>: Archivo JSON que controla cómo se muestra la app cuando se instala</p>
+                            <pre><code class="language-json">// manifest.webmanifest
+{
+  "name": "Mi Aplicación PWA",
+  "short_name": "MiApp",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2196f3",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}</code></pre>
+                            
+                            <p><strong>Service Workers</strong>: Scripts que se ejecutan en segundo plano y permiten funcionalidades como caché y notificaciones push</p>
+                            <pre><code class="language-javascript">// Registrar un Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('SW registrado:', registration);
+      })
+      .catch(error => {
+        console.log('Error al registrar SW:', error);
+      });
+  });
+}
+
+// sw.js - Service Worker
+const CACHE_NAME = 'mi-app-cache-v1';
+const urlsToCache = [
+  '/',
+  '/styles/main.css',
+  '/scripts/main.js',
+  '/images/logo.png'
+];
+
+// Instalar SW y crear caché
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        return cache.addAll(urlsToCache);
+      })
+  );
+});
+
+// Interceptar solicitudes de red
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // Devolver de caché si está disponible
+        if (response) {
+          return response;
+        }
+        // Si no, hacer solicitud a la red
+        return fetch(event.request);
+      })
+  );
+});</code></pre>
+                        </div>
+
+                        <div class="subsection" id="webassembly">
+                            <h3>WebAssembly</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="5"></div>
+                            </div>
+                            <p>WebAssembly (Wasm) es un formato de código binario eficiente que permite ejecutar código compilado en el navegador a velocidades cercanas al código nativo.</p>
+                            
+                            <h4 class="mt-4">Características</h4>
+                            <ul>
+                                <li><strong>Rendimiento</strong>: Ejecución rápida, cercana al nativo</li>
+                                <li><strong>Seguridad</strong>: Se ejecuta en un entorno sandbox</li>
+                                <li><strong>Portabilidad</strong>: Funciona en todos los navegadores modernos</li>
+                                <li><strong>Interoperabilidad</strong>: Puede interactuar con JavaScript</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Casos de Uso</h4>
+                            <ul>
+                                <li>Videojuegos en el navegador</li>
+                                <li>Aplicaciones de edición de imagen y video</li>
+                                <li>Procesamiento intensivo de datos</li>
+                                <li>Simulaciones científicas</li>
+                                <li>Reconocimiento de voz y procesamiento de lenguaje natural</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Ejemplo: Integración de Wasm con JavaScript</h4>
+                            <pre><code class="language-javascript">// Cargar un módulo WebAssembly
+fetch('module.wasm')
+  .then(response => response.arrayBuffer())
+  .then(buffer => WebAssembly.instantiate(buffer))
+  .then(obj => {
+    // Obtener la instancia exportada
+    const instance = obj.instance;
+    
+    // Llamar a una función del módulo Wasm
+    const result = instance.exports.suma(5, 7);
+    console.log('5 + 7 =', result); // 12
+  });</code></pre>
+                        </div>
+
+                        <div class="subsection" id="web-apis">
+                            <h3>APIs Web Modernas</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Los navegadores modernos ofrecen potentes APIs que permiten crear experiencias avanzadas.</p>
+                            
+                            <h4 class="mt-4">API de Geolocalización</h4>
+                            <pre><code class="language-javascript">if ('geolocation' in navigator) {
+  navigator.geolocation.getCurrentPosition(position => {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    console.log(`Ubicación: ${latitude}, ${longitude}`);
+  }, error => {
+    console.error('Error al obtener la ubicación:', error.message);
+  });
+} else {
+  console.error('Geolocalización no disponible');
+}</code></pre>
+                            
+                            <h4 class="mt-4">Web Storage API</h4>
+                            <pre><code class="language-javascript">// localStorage - persistente
+localStorage.setItem('tema', 'oscuro');
+const tema = localStorage.getItem('tema');
+
+// sessionStorage - dura hasta cerrar la sesión
+sessionStorage.setItem('usuario', 'Ana');
+const usuario = sessionStorage.getItem('usuario');</code></pre>
+                            
+                            <h4 class="mt-4">IndexedDB</h4>
+                            <p>Base de datos NoSQL en el navegador para almacenar grandes cantidades de datos estructurados.</p>
+                            <pre><code class="language-javascript">// Abrir conexión
+const request = indexedDB.open('miBaseDeDatos', 1);
+
+request.onupgradeneeded = event => {
+  const db = event.target.result;
+  
+  // Crear almacén de objetos
+  const store = db.createObjectStore('notas', { keyPath: 'id' });
+  store.createIndex('titulo', 'titulo', { unique: false });
+};
+
+request.onsuccess = event => {
+  const db = event.target.result;
+  
+  // Añadir datos
+  const transaction = db.transaction(['notas'], 'readwrite');
+  const store = transaction.objectStore('notas');
+  
+  store.add({
+    id: 1,
+    titulo: 'Mi nota',
+    contenido: 'Contenido de la nota'
+  });
+  
+  // Leer datos
+  const getRequest = store.get(1);
+  getRequest.onsuccess = e => {
+    console.log(e.target.result);
+  };
+};</code></pre>
+                            
+                            <h4 class="mt-4">Web Workers</h4>
+                            <p>Permiten ejecutar scripts en hilos separados para no bloquear la interfaz.</p>
+                            <pre><code class="language-javascript">// main.js
+const worker = new Worker('worker.js');
+
+worker.postMessage({
+  data: [1, 2, 3, 4, 5],
+  operacion: 'sumar'
+});
+
+worker.onmessage = event => {
+  console.log('Resultado del worker:', event.data);
+};
+
+// worker.js
+self.addEventListener('message', event => {
+  const { data, operacion } = event.data;
+  
+  if (operacion === 'sumar') {
+    const resultado = data.reduce((sum, num) => sum + num, 0);
+    self.postMessage(resultado);
+  }
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 13: Accesibilidad Web -->
+            <div class="content-section" id="accessibility">
+                <div class="section-header">
+                    <h2><span class="section-icon">♿</span> Accesibilidad Web</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="a11y-fundamentals">
+                            <h3>Fundamentos de Accesibilidad</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="3"></div>
+                            </div>
+                            <p>La accesibilidad web significa que personas con discapacidades pueden percibir, comprender, navegar e interactuar con la web.</p>
+                            
+                            <h4 class="mt-4">Principios WCAG</h4>
+                            <p>Los estándares de accesibilidad web están definidos por las Pautas de Accesibilidad al Contenido Web (WCAG) y se basan en cuatro principios:</p>
+                            <ol>
+                                <li><strong>Perceptible</strong>: La información debe ser presentada de manera que los usuarios puedan percibirla</li>
+                                <li><strong>Operable</strong>: La interfaz no debe requerir interacciones que un usuario no pueda realizar</li>
+                                <li><strong>Comprensible</strong>: La información y el funcionamiento deben ser comprensibles</li>
+                                <li><strong>Robusto</strong>: El contenido debe ser suficientemente robusto para funcionar con tecnologías actuales y futuras</li>
+                            </ol>
+                            
+                            <h4 class="mt-4">Niveles de Conformidad</h4>
+                            <ul>
+                                <li><strong>Nivel A</strong>: Nivel mínimo de accesibilidad</li>
+                                <li><strong>Nivel AA</strong>: Elimina importantes barreras de acceso (el estándar común)</li>
+                                <li><strong>Nivel AAA</strong>: Nivel óptimo de accesibilidad</li>
+                            </ul>
+                        </div>
+
+                        <div class="subsection" id="a11y-implementation">
+                            <h3>Implementación de la Accesibilidad</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Técnicas prácticas para hacer que los sitios web sean accesibles:</p>
+                            
+                            <h4 class="mt-4">Semántica HTML</h4>
+                            <p>Usar elementos HTML apropiados según su significado.</p>
+                            <pre><code class="language-html">&lt;!-- Mal ejemplo --&gt;
+&lt;div class="header"&gt;Mi Sitio&lt;/div&gt;
+&lt;div class="navigation"&gt;...&lt;/div&gt;
+&lt;div class="main"&gt;...&lt;/div&gt;
+&lt;div class="footer"&gt;...&lt;/div&gt;
+
+&lt;!-- Buen ejemplo --&gt;
+&lt;header&gt;Mi Sitio&lt;/header&gt;
+&lt;nav&gt;...&lt;/nav&gt;
+&lt;main&gt;...&lt;/main&gt;
+&lt;footer&gt;...&lt;/footer&gt;</code></pre>
+                            
+                            <h4 class="mt-4">Atributos ARIA</h4>
+                            <p>ARIA (Accessible Rich Internet Applications) proporciona atributos para mejorar la accesibilidad.</p>
+                            <pre><code class="language-html">&lt;!-- Roles --&gt;
+&lt;div role="alert"&gt;Este es un mensaje importante&lt;/div&gt;
+
+&lt;!-- Estados y propiedades --&gt;
+&lt;button aria-expanded="false" aria-controls="menu"&gt;Menú&lt;/button&gt;
+&lt;div id="menu" aria-hidden="true"&gt;...&lt;/div&gt;
+
+&lt;!-- Etiquetas --&gt;
+&lt;input type="text" aria-label="Buscar en el sitio"&gt;
+&lt;button aria-labelledby="tooltip-1"&gt;?&lt;/button&gt;
+&lt;div id="tooltip-1"&gt;Ayuda contextual&lt;/div&gt;</code></pre>
+                            
+                            <h4 class="mt-4">Teclado y Foco</h4>
+                            <ul>
+                                <li>Todos los controles interactivos deben ser accesibles mediante teclado</li>
+                                <li>El orden de tabulación debe ser lógico</li>
+                                <li>El foco debe ser visible en todo momento</li>
+                                <li>No usar <code>tabindex</code> mayor que 0 (altera el orden natural)</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Contraste y Texto</h4>
+                            <ul>
+                                <li>Nivel AA: Contraste de texto mínimo 4.5:1 (3:1 para texto grande)</li>
+                                <li>Permitir el redimensionamiento del texto hasta un 200% sin pérdida de contenido</li>
+                                <li>No usar solo el color para transmitir información</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Imágenes y Multimedia</h4>
+                            <ul>
+                                <li>Proporcionar texto alternativo para imágenes</li>
+                                <li>Incluir subtítulos y transcripciones para audio</li>
+                                <li>Evitar contenido que parpadee más de 3 veces por segundo</li>
+                            </ul>
+                            <pre><code class="language-html">&lt;!-- Imagen informativa --&gt;
+&lt;img src="logo.png" alt="Logo de Mi Empresa"&gt;
+
+&lt;!-- Imagen decorativa --&gt;
+&lt;img src="decoracion.png" alt=""&gt;
+
+&lt;!-- Video con subtítulos --&gt;
+&lt;video controls&gt;
+    &lt;source src="video.mp4" type="video/mp4"&gt;
+    &lt;track src="subtitulos.vtt" kind="subtitles" srclang="es" label="Español"&gt;
+    Tu navegador no soporta el elemento video.
+&lt;/video&gt;</code></pre>
+                        </div>
+
+                        <div class="subsection" id="a11y-testing">
+                            <h3>Pruebas de Accesibilidad</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="3"></div>
+                            </div>
+                            <p>Herramientas y métodos para evaluar la accesibilidad de un sitio web:</p>
+                            
+                            <h4 class="mt-4">Comprobación Automática</h4>
+                            <ul>
+                                <li><strong>Lighthouse</strong>: Herramienta integrada en Chrome DevTools</li>
+                                <li><strong>axe</strong>: Motor de pruebas de accesibilidad integrable</li>
+                                <li><strong>WAVE</strong>: Herramienta web y extensión de navegador</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Pruebas Manuales</h4>
+                            <ul>
+                                <li>Navegar por el sitio usando solo el teclado</li>
+                                <li>Probar con lectores de pantalla (NVDA, JAWS, VoiceOver)</li>
+                                <li>Verificar el contraste de colores</li>
+                                <li>Comprobar el comportamiento al ampliar la página (zoom)</li>
+                                <li>Revisar la estructura de encabezados y landmarks</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Lista de Verificación Básica</h4>
+                            <ol>
+                                <li>¿Todas las imágenes tienen texto alternativo adecuado?</li>
+                                <li>¿Los formularios tienen etiquetas asociadas a cada campo?</li>
+                                <li>¿La estructura de encabezados (h1-h6) es jerárquica y lógica?</li>
+                                <li>¿El sitio es completamente navegable por teclado?</li>
+                                <li>¿El contraste de texto cumple con los estándares WCAG?</li>
+                                <li>¿Los enlaces tienen texto descriptivo (no solo "haga clic aquí")?</li>
+                                <li>¿Los videos tienen subtítulos?</li>
+                                <li>¿El contenido sigue siendo accesible cuando se aumenta el zoom?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección 14: Internet e Infraestructura Web -->
+            <div class="content-section" id="web-infra">
+                <div class="section-header">
+                    <h2><span class="section-icon">🌐</span> Internet e Infraestructura Web</h2>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="section-content">
+                    <div class="section-content-inner">
+                        <div class="subsection" id="how-internet-works">
+                            <h3>Cómo Funciona Internet</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="3"></div>
+                            </div>
+                            <p>Fundamentos técnicos sobre cómo funciona Internet y la web.</p>
+                            
+                            <h4 class="mt-4">Modelo TCP/IP</h4>
+                            <p>El conjunto de protocolos que gobierna cómo fluyen los datos en Internet:</p>
+                            <ol>
+                                <li><strong>Capa de Aplicación</strong>: HTTP, FTP, SMTP, DNS</li>
+                                <li><strong>Capa de Transporte</strong>: TCP, UDP</li>
+                                <li><strong>Capa de Internet</strong>: IP, ICMP</li>
+                                <li><strong>Capa de Enlace</strong>: Ethernet, Wi-Fi</li>
+                            </ol>
+                            
+                            <h4 class="mt-4">DNS (Domain Name System)</h4>
+                            <p>Sistema que traduce nombres de dominio a direcciones IP:</p>
+                            <ul>
+                                <li><strong>Solicitud DNS</strong>: El navegador pregunta "¿Cuál es la IP de example.com?"</li>
+                                <li><strong>Resolución</strong>: Servidor DNS responde con "192.0.2.1"</li>
+                                <li><strong>Conexión</strong>: El navegador se conecta a 192.0.2.1</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">HTTP (Hypertext Transfer Protocol)</h4>
+                            <p>Protocolo para transferir hipertexto entre sistemas:</p>
+                            <ul>
+                                <li><strong>Métodos</strong>: GET, POST, PUT, DELETE, etc.</li>
+                                <li><strong>Códigos de estado</strong>: 200 (OK), 404 (Not Found), 500 (Server Error)</li>
+                                <li><strong>Cabeceras</strong>: Metadatos de la solicitud/respuesta</li>
+                            </ul>
+                            <pre><code class="language-http">GET /index.html HTTP/1.1
+Host: www.example.com
+User-Agent: Mozilla/5.0
+Accept: text/html
+
+HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 1234
+Date: Mon, 18 May 2025 10:33:27 GMT
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;...&lt;/html&gt;</code></pre>
+                            
+                            <h4 class="mt-4">HTTPS y TLS</h4>
+                            <p>Versión segura de HTTP que cifra las comunicaciones:</p>
+                            <ol>
+                                <li>El cliente solicita una conexión segura</li>
+                                <li>El servidor envía su certificado</li>
+                                <li>El cliente verifica el certificado</li>
+                                <li>Ambos acuerdan una clave de sesión</li>
+                                <li>La comunicación queda cifrada</li>
+                            </ol>
+                        </div>
+
+                        <div class="subsection" id="hosting-servers">
+                            <h3>Servidores y Hosting</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="3"></div>
+                            </div>
+                            <p>Infraestructura que hace que los sitios web estén disponibles en Internet.</p>
+                            
+                            <h4 class="mt-4">Tipos de Servidores Web</h4>
+                            <ul>
+                                <li><strong>Apache</strong>: Popular, maduro y extensible</li>
+                                <li><strong>Nginx</strong>: Alto rendimiento, especializado en contenido estático y proxy</li>
+                                <li><strong>IIS</strong>: Servidor web de Microsoft para Windows</li>
+                                <li><strong>Node.js</strong>: Entorno de ejecución que puede servir aplicaciones web</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Configuración Básica de Nginx</h4>
+                            <pre><code class="language-nginx">server {
+    listen 80;
+    server_name example.com www.example.com;
+    
+    location / {
+        root /var/www/html;
+        index index.html index.htm;
+        try_files $uri $uri/ =404;
+    }
+    
+    location /api {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+    
+    error_page 404 /404.html;
+    location = /404.html {
+        root /var/www/html;
+    }
+}</code></pre>
+                            
+                            <h4 class="mt-4">Registradores de Dominio y DNS</h4>
+                            <p>Para hacer visible un sitio en Internet:</p>
+                            <ol>
+                                <li>Registrar un dominio en un registrador (GoDaddy, Namecheap, Google Domains)</li>
+                                <li>Configurar registros DNS para apuntar a tu servidor:
+                                    <ul>
+                                        <li><strong>A Record</strong>: Dominio → IP</li>
+                                        <li><strong>CNAME</strong>: Alias para otro dominio</li>
+                                        <li><strong>MX</strong>: Servidor de correo</li>
+                                        <li><strong>TXT</strong>: Información textual (verificación)</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div class="subsection" id="cdn-scaling">
+                            <h3>CDN y Escalabilidad</h3>
+                            <div class="difficulty-container">
+                                <span class="difficulty-label">Nivel:</span>
+                                <div class="difficulty-indicator" data-level="4"></div>
+                            </div>
+                            <p>Técnicas para servir contenido eficientemente a escala global.</p>
+                            
+                            <h4 class="mt-4">CDN (Content Delivery Network)</h4>
+                            <p>Red de servidores distribuidos geográficamente para entregar contenido:</p>
+                            <ul>
+                                <li><strong>Mejor rendimiento</strong>: Sirve desde el punto más cercano al usuario</li>
+                                <li><strong>Menor carga en el servidor de origen</strong>: La mayoría del tráfico lo maneja el CDN</li>
+                                <li><strong>Alta disponibilidad</strong>: Redundancia geográfica</li>
+                                <li><strong>Protección DDoS</strong>: Muchos CDN ofrecen escudo contra ataques</li>
+                            </ul>
+                            <p>Proveedores populares: Cloudflare, Akamai, AWS CloudFront, Fastly</p>
+                            
+                            <h4 class="mt-4">Escalabilidad</h4>
+                            <p><strong>Escalabilidad Vertical</strong>: Aumentar la potencia del servidor</p>
+                            <ul>
+                                <li>Más CPU, RAM, capacidad de disco</li>
+                                <li>Límites físicos y de costo</li>
+                                <li>Punto único de fallo</li>
+                            </ul>
+                            
+                            <p><strong>Escalabilidad Horizontal</strong>: Aumentar el número de servidores</p>
+                            <ul>
+                                <li>Añadir más máquinas al sistema</li>
+                                <li>Requiere balanceo de carga</li>
+                                <li>Mayor tolerancia a fallos</li>
+                                <li>Más fácil de escalar según demanda</li>
+                            </ul>
+                            
+                            <h4 class="mt-4">Balanceo de Carga</h4>
+                            <p>Distribuye el tráfico entre múltiples servidores:</p>
+                            <ul>
+                                <li><strong>Round Robin</strong>: Distribuye secuencialmente</li>
+                                <li><strong>Least Connections</strong>: Envía a servidor con menos conexiones</li>
+                                <li><strong>IP Hash</strong>: Consistencia por IP del cliente</li>
+                                <li><strong>Geolocalización</strong>: Dirige a servidores más cercanos</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <button id="back-to-top" class="back-to-top">
+            <div class="back-to-top-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2l-8 8h5v8h6v-8h5l-8-8z" fill="white"/>
+                    <path d="M12 8l-4 4h3v6h2v-6h3l-4-4z" fill="black"/>
+                </svg>
+            </div>
+        </button>
+    </div>
+    
+    <script src="/static/script.js"></script>
+</body>
+</html>
